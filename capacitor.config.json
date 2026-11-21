@@ -1,0 +1,12 @@
+{
+  "appId": "com.yourcompany.ludo",
+  "appName": "Ludo",
+  "webDir": "www",
+  "backgroundColor": "#1b1440",
+  "server": {
+    "androidScheme": "https"
+  },
+  "android": {
+    "allowMixedContent": false
+  }
+}

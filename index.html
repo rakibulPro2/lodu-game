@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+  <meta name="theme-color" content="#1b1440">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Ludo">
+  <meta name="description" content="Ludo - the classic board game. Play vs Computer or Pass & Play with 2 to 4 players.">
+  <title>Ludo - Classic Board Game</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%231b1440'/%3E%3Ccircle cx='32' cy='32' r='15' fill='%23e63946'/%3E%3Ccircle cx='68' cy='32' r='15' fill='%2330b566'/%3E%3Ccircle cx='32' cy='68' r='15' fill='%23fcbf24'/%3E%3Ccircle cx='68' cy='68' r='15' fill='%23318cf0'/%3E%3C/svg%3E">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <noscript><p class="noscript">Please enable JavaScript to play this game.</p></noscript>
+
+  <!-- Global sound button (controlled by sound.js) -->
+  <button id="sound-toggle" class="icon-btn" type="button" aria-label="Mute or unmute sound" title="Sound on/off">
+    <svg class="icon-on" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M19 5a10 10 0 0 1 0 14"/></svg>
+    <svg class="icon-off" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4z"/><path d="m22 9-6 6"/><path d="m16 9 6 6"/></svg>
+  </button>
+
+  <main id="app">
+
+    <!-- MENU -->
+    <section id="menu-screen" class="screen active">
+      <div class="logo">
+        <div class="logo-tokens" aria-hidden="true">
+          <i class="tk red"></i><i class="tk green"></i><i class="tk blue"></i><i class="tk yellow"></i>
+        </div>
+        <h1 class="logo-title">LUDO</h1>
+        <p class="logo-sub">The classic board game</p>
+      </div>
+      <div class="menu-buttons">
+        <button id="btn-vs-computer" class="btn btn-primary" type="button">Play vs Computer</button>
+        <button id="btn-pass-play" class="btn btn-secondary" type="button">Pass &amp; Play</button>
+        <button id="btn-team" class="btn btn-secondary" type="button">Team Up (2 vs 2)</button>
+        <button id="btn-how" class="btn btn-ghost" type="button">How to play</button>
+      </div>
+    </section>
+
+    <!-- SETUP -->
+    <section id="setup-screen" class="screen">
+      <h2 id="setup-title">Game setup</h2>
+      <p id="setup-hint" class="hint"></p>
+      <div id="count-group" class="seg" role="group" aria-label="Number of players">
+        <button class="seg-btn" type="button" data-count="2">2</button>
+        <button class="seg-btn" type="button" data-count="3">3</button>
+        <button class="seg-btn" type="button" data-count="4">4</button>
+      </div>
+      <div id="team-group" class="seg" role="group" aria-label="Team mode" hidden>
+        <button class="seg-btn" type="button" data-bots="0">4 players</button>
+        <button class="seg-btn" type="button" data-bots="1">Me + 3 bots</button>
+      </div>
+      <div id="player-rows">
+        <label class="player-row" data-player="0"><span class="dot"></span><input class="name-input" type="text" maxlength="12" value="Red" aria-label="Red player name"><span class="tag"></span></label>
+        <label class="player-row" data-player="1"><span class="dot"></span><input class="name-input" type="text" maxlength="12" value="Green" aria-label="Green player name"><span class="tag"></span></label>
+        <label class="player-row" data-player="2"><span class="dot"></span><input class="name-input" type="text" maxlength="12" value="Yellow" aria-label="Yellow player name"><span class="tag"></span></label>
+        <label class="player-row" data-player="3"><span class="dot"></span><input class="name-input" type="text" maxlength="12" value="Blue" aria-label="Blue player name"><span class="tag"></span></label>
+      </div>
+      <div class="row-actions">
+        <button id="btn-back-menu" class="btn btn-ghost" type="button">Back</button>
+        <button id="btn-start" class="btn btn-primary" type="button">Start game</button>
+      </div>
+    </section>
+
+    <!-- GAME -->
+    <section id="game-screen" class="screen" data-turn="0">
+      <header class="topbar">
+        <button id="btn-home" class="btn btn-small btn-ghost" type="button">Menu</button>
+        <button id="btn-restart" class="btn btn-small btn-ghost" type="button">Restart</button>
+      </header>
+
+      <div id="arena">
+        <div class="seat hidden" data-player="0">
+          <button class="dice" type="button" data-player="0" data-value="0" aria-label="Red dice"><span class="pip"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span></button>
+          <div class="player-chip" data-player="0"><span class="dot"></span><span class="pname">Red</span><span class="pscore">0/4</span></div>
+        </div>
+        <div class="seat hidden" data-player="1">
+          <button class="dice" type="button" data-player="1" data-value="0" aria-label="Green dice"><span class="pip"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span></button>
+          <div class="player-chip" data-player="1"><span class="dot"></span><span class="pname">Green</span><span class="pscore">0/4</span></div>
+        </div>
+        <div class="seat hidden" data-player="2">
+          <button class="dice" type="button" data-player="2" data-value="0" aria-label="Yellow dice"><span class="pip"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span></button>
+          <div class="player-chip" data-player="2"><span class="dot"></span><span class="pname">Yellow</span><span class="pscore">0/4</span></div>
+        </div>
+        <div class="seat hidden" data-player="3">
+          <button class="dice" type="button" data-player="3" data-value="0" aria-label="Blue dice"><span class="pip"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span></button>
+          <div class="player-chip" data-player="3"><span class="dot"></span><span class="pname">Blue</span><span class="pscore">0/4</span></div>
+        </div>
+
+        <div id="board-wrap">
+          <canvas id="board" width="720" height="720" aria-label="Ludo board"></canvas>
+        </div>
+      </div>
+
+      <p id="status-text" aria-live="polite"></p>
+    </section>
+
+    <!-- WIN -->
+    <section id="win-screen" class="screen modal-screen">
+      <div class="modal-card">
+        <h2 id="win-title">Winner!</h2>
+        <ol id="win-ranking"></ol>
+        <div class="row-actions">
+          <button id="btn-win-menu" class="btn btn-ghost" type="button">Menu</button>
+          <button id="btn-play-again" class="btn btn-primary" type="button">Play again</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- HOW TO PLAY -->
+  <div id="how-modal" class="modal-screen" hidden>
+    <div class="modal-card">
+      <h2>How to play</h2>
+      <ul class="rules">
+        <li>Every player has his <b>own dice</b> next to his corner. Tap your dice on your turn. Other dice stay locked.</li>
+        <li>Roll a <b>6</b> to bring a token out of its yard.</li>
+        <li>Move a token the number shown on the dice and follow the track clockwise.</li>
+        <li>Land on an opponent's token to send it back to its yard. Tokens on star or start squares are safe.</li>
+        <li>Rolling a 6, capturing a token, or reaching home gives you another turn.</li>
+        <li>Three sixes in a row ends your turn.</li>
+        <li>Get all 4 tokens into the center to win.</li>
+              <li><b>Team Up:</b> Red &amp; Yellow play against Green &amp; Blue. Partners never capture each other. A team wins when all 8 tokens are home. Once you have finished, your dice moves your partner's tokens.</li>
+      </ul>
+      <div class="row-actions">
+        <button id="btn-how-close" class="btn btn-primary" type="button">Got it</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ad banner slot (filled by ads-config.js) -->
+  <div id="ad-banner" class="ad-slot" aria-label="Advertisement"></div>
+
+  <script src="ads-config.js"></script>
+  <script src="sound.js"></script>
+  <script src="game.js"></script>
+  <script>
+    /* Offline support for the website / PWA version (skipped inside the Android app). */
+    (function () {
+      var native = window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform();
+      if (!native && 'serviceWorker' in navigator && /^https?:$/.test(location.protocol)) {
+        window.addEventListener('load', function () {
+          navigator.serviceWorker.register('sw.js').catch(function () {});
+        });
+      }
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,22 @@
+{
+  "name": "ludo-game",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Ludo HTML5 game packaged for Android with Capacitor",
+  "scripts": {
+    "web": "node copy-web.js",
+    "assets": "npx capacitor-assets generate --android",
+    "add:android": "npm run web && npx cap add android",
+    "sync": "npm run web && npx cap sync android",
+    "open": "npx cap open android"
+  },
+  "dependencies": {
+    "@capacitor/android": "^6.1.0",
+    "@capacitor/app": "^6.0.0",
+    "@capacitor/core": "^6.1.0"
+  },
+  "devDependencies": {
+    "@capacitor/assets": "^3.0.5",
+    "@capacitor/cli": "^6.1.0"
+  }
+}
